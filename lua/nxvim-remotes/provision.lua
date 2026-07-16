@@ -16,7 +16,7 @@ end
 
 -- Progress on the message line, prefixed so it is clearly the connector talking.
 local function progress(msg)
-  nx.notify("remote-containers: " .. msg)
+  nx.notify("remotes: " .. msg)
 end
 M._progress = progress
 

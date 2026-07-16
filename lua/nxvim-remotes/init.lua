@@ -1,4 +1,4 @@
--- nxvim-remote-containers — a *connector* for nxvim's `:connect` (the VS Code Remote model,
+-- nxvim-remotes — a *connector* for nxvim's `:connect` (the VS Code Remote model,
 -- ADR 0002 / the native `nx.connect` API). It teaches `:connect` two schemes:
 --
 --   :connect container://<name>       -- a running Docker container (docker exec)
@@ -15,12 +15,12 @@
 -- `nx.plugins.system{...}`), so the client re-seeds it into every session — including the
 -- one it swaps you onto — which is what keeps `:connect` available after the reload.
 
-local backends = require("nxvim-remote-containers.backends")
-local provision = require("nxvim-remote-containers.provision")
+local backends = require("nxvim-remotes.backends")
+local provision = require("nxvim-remotes.provision")
 
 local M = {}
 
--- Defaults. Every field is overridable via `require("nxvim-remote-containers").setup{...}`.
+-- Defaults. Every field is overridable via `require("nxvim-remotes").setup{...}`.
 local DEFAULTS = {
   docker = "docker", -- the docker CLI
   ssh = "ssh", -- the ssh CLI
@@ -30,7 +30,7 @@ local DEFAULTS = {
   install_dir = "/tmp/nxvim-remote", -- where binary = "install" stages the binary on the remote
   -- Release-URL template for binary = "install"; `{platform}` -> e.g. "linux-x86_64".
   release_url = "https://github.com/davidrios/nxvim/releases/latest/download/nxvim-{platform}",
-  cache_dir = nil, -- local download cache (default stdpath("cache")/nxvim-remote-containers)
+  cache_dir = nil, -- local download cache (default stdpath("cache")/nxvim-remotes)
   control_dir = nil, -- ssh control-socket dir (default cache_dir/cm)
   control_persist = "60", -- ssh ControlPersist (seconds, or "yes"): master idle-lifetime
   config_source = "remote", -- §D: run the remote's config ("remote") or this machine's ("local")
@@ -39,11 +39,11 @@ local DEFAULTS = {
 M._opts = M._opts or vim.tbl_extend("force", {}, DEFAULTS)
 
 -- `setup(opts)` — merge `opts`, register the `container://` / `ssh://` connect providers, and
--- define `:RemoteContainersClean`. Idempotent: re-registering a scheme is fine (a later
+-- define `:RemotesClean`. Idempotent: re-registering a scheme is fine (a later
 -- `nx.connect.register` wins), so calling `setup` again just re-applies options.
 function M.setup(opts)
   M._opts = vim.tbl_extend("force", M._opts, opts or {})
-  local cache = M._opts.cache_dir or (vim.fn.stdpath("cache") .. "/nxvim-remote-containers")
+  local cache = M._opts.cache_dir or (vim.fn.stdpath("cache") .. "/nxvim-remotes")
   M._opts.cache_dir = cache
   M._opts.control_dir = M._opts.control_dir or (cache .. "/cm")
 
@@ -56,7 +56,7 @@ function M.setup(opts)
     return provision.resolve(backends.ssh(M._opts), url, M._opts)
   end)
 
-  nx.command("RemoteContainersClean", function()
+  nx.command("RemotesClean", function()
     M.clean()
   end, {
     desc = "Close any lingering ssh control-masters opened by :connect ssh://…",
@@ -74,7 +74,7 @@ function M.disconnect(url)
     local backend = backends.ssh(M._opts)
     local target = backend.parse(url)
     nx.await(nx.run_local({ cmd = backend.teardown_argv(target) }))
-    -- Drop the socket + sidecar so a later :RemoteContainersClean doesn't retry it.
+    -- Drop the socket + sidecar so a later :RemotesClean doesn't retry it.
     nx.await(nx.fs_local.remove(backend.control_path(target)))
     nx.await(nx.fs_local.remove(backend.control_path(target) .. ".host"))
   end)()

@@ -15,11 +15,11 @@ local function parse_container(url)
   name = name and name:match("^%s*(.-)%s*$")
   if not name or name == "" then
     error(
-      "remote-containers: malformed container URL " .. tostring(url) .. " (want container://<name>)"
+      "remotes: malformed container URL " .. tostring(url) .. " (want container://<name>)"
     )
   end
   if name:sub(1, 1) == "-" then
-    error("remote-containers: container name must not begin with '-' (" .. name .. ")")
+    error("remotes: container name must not begin with '-' (" .. name .. ")")
   end
   return { display = name, ref = name }
 end
@@ -57,7 +57,7 @@ local function parse_ssh(url)
   rest = rest and rest:match("^%s*(.-)%s*$")
   if not rest or rest == "" then
     error(
-      "remote-containers: malformed ssh URL " .. tostring(url) .. " (want ssh://[user@]host[:port])"
+      "remotes: malformed ssh URL " .. tostring(url) .. " (want ssh://[user@]host[:port])"
     )
   end
   local user, hostport = rest:match("^([^@]+)@(.+)$")
@@ -69,10 +69,10 @@ local function parse_ssh(url)
     host = hostport
   end
   if host == "" then
-    error("remote-containers: ssh URL has no host (" .. url .. ")")
+    error("remotes: ssh URL has no host (" .. url .. ")")
   end
   if host:sub(1, 1) == "-" or (user and user:sub(1, 1) == "-") then
-    error("remote-containers: ssh host/user must not begin with '-' (" .. url .. ")")
+    error("remotes: ssh host/user must not begin with '-' (" .. url .. ")")
   end
   local dest = user and (user .. "@" .. host) or host
   return { display = dest .. (port and (":" .. port) or ""), dest = dest, port = port }
@@ -82,7 +82,7 @@ end
 -- a per-host `ControlPath`) is auto-created by the first ssh call and reused by the daemon
 -- spawn and every reconnect, so a dropped link re-dials without re-authenticating.
 -- `ControlPersist` keeps the master alive briefly after the last connection and then it
--- self-expires — the automatic cleanup path. `M.disconnect` / `:RemoteContainersClean`
+-- self-expires — the automatic cleanup path. `M.disconnect` / `:RemotesClean`
 -- (init.lua) tear a master down explicitly via `ssh -O exit`, keyed by the on-disk `.host`
 -- sidecar so cleanup survives a VM swap.
 function M.ssh(opts)

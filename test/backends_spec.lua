@@ -1,7 +1,7 @@
 -- The backend descriptors (docker / ssh): URL parsing + the argv they build. Pure — no
 -- external tools — so these run anywhere. Run with `nxvim --test-plugin .`.
 
-local backends = require("nxvim-remote-containers.backends")
+local backends = require("nxvim-remotes.backends")
 
 local OPTS = {
   docker = "docker",

@@ -1,4 +1,4 @@
--- ~~~ nxvim-remote-containers: connect the editor to a container / host ~~~
+-- ~~~ nxvim-remotes: connect the editor to a container / host ~~~
 --
 -- This connector teaches `:connect` two schemes and reloads the window onto the remote's
 -- `nxvim --daemon` — the editor (buffers, Lua, keystrokes) stays local; only the
@@ -10,10 +10,10 @@
 -- Install it as a SYSTEM plugin so it is present before any `:connect` and survives the
 -- reload onto the remote (the client re-seeds the system tier into every session):
 --
---     :lua nx.plugins.system{ "nxvim/nxvim-remote-containers" }
+--     :lua nx.plugins.system{ "nxvim/nxvim-remotes" }
 --
--- (or clone it into `stdpath("data")/system/nxvim-remote-containers` yourself). Then
--- `require("nxvim-remote-containers").setup{...}` — as below — tunes it. As an ordinary
+-- (or clone it into `stdpath("data")/system/nxvim-remotes` yourself). Then
+-- `require("nxvim-remotes").setup{...}` — as below — tunes it. As an ordinary
 -- (non-system) plugin it still works in the local session; it just won't persist across a
 -- swap onto a *different* remote.
 --
@@ -25,7 +25,7 @@
 --     :connect container://devbox
 --     :lua print(nx.daemon.status())     -- "connected": you're editing IN the container
 
-require("nxvim-remote-containers").setup({
+require("nxvim-remotes").setup({
   -- How to obtain nxvim on the remote:
   --   "path"    — assume `remote_nxvim` (below) is already on the remote PATH (default).
   --   "install" — reuse install_dir/nxvim-<platform>, else fetch the matching release binary
@@ -43,7 +43,7 @@ require("nxvim-remote-containers").setup({
   config_source = "remote",
 
   -- ssh multiplexing: keep the control-master alive this many seconds after the last
-  -- connection so reconnects don't re-authenticate. `:RemoteContainersClean` closes any
+  -- connection so reconnects don't re-authenticate. `:RemotesClean` closes any
   -- lingering masters explicitly.
   control_persist = "60",
 })

@@ -1,4 +1,4 @@
-# nxvim-remote-containers
+# nxvim-remotes
 
 A **connector** for [nxvim](https://github.com/davidrios/nxvim)'s `:connect` — the VS Code
 Remote model, built entirely on the native `nx.connect` / `nx.session.reconnect` plugin API
@@ -10,7 +10,7 @@ zero-round-trip while your files, tools, and language servers live on the remote
 ```
 :connect container://<name>        connect to a running Docker container (docker exec)
 :connect ssh://[user@]host[:port]  connect to a remote host over ssh (multiplexed)
-:RemoteContainersClean             close any lingering ssh control-masters
+:RemotesClean             close any lingering ssh control-masters
 ```
 
 ## Install
@@ -20,7 +20,7 @@ the system tier into *every* session, including the one it swaps you onto, which
 keeps `:connect` available after the reload:
 
 ```lua
-:lua nx.plugins.system{ "nxvim/nxvim-remote-containers" }
+:lua nx.plugins.system{ "nxvim/nxvim-remotes" }
 ```
 
 That clones it into `stdpath("data")/system/` and loads it. (You can also clone it there
@@ -30,7 +30,7 @@ across a swap onto a *different* remote.
 Then tune it (optional — the defaults work):
 
 ```lua
-require("nxvim-remote-containers").setup({
+require("nxvim-remotes").setup({
   binary = "path",              -- "path" (assume nxvim on the remote PATH) | "install"
   remote_nxvim = "nxvim",       -- the nxvim command on the remote (binary = "path")
   config_source = "remote",     -- "remote" (the remote's config) | "local" (yours; remote seams only)
@@ -59,7 +59,7 @@ an existing remote session. It then:
 For `ssh://`, connections are **multiplexed**: a control-master (`ControlMaster=auto` + a
 per-host `ControlPath`) is created by the first call and reused by the daemon spawn and every
 reconnect, so a dropped link re-dials without re-authenticating. `ControlPersist` bounds its
-idle lifetime; `:RemoteContainersClean` (keyed by on-disk sidecars, so it survives a swap)
+idle lifetime; `:RemotesClean` (keyed by on-disk sidecars, so it survives a swap)
 closes masters explicitly.
 
 ### `config_source` (local vs remote config)
@@ -77,7 +77,7 @@ the container's toolchain.
 | `remote_nxvim`    | `"nxvim"`                                 | the nxvim command on the remote (`binary = "path"`)                 |
 | `install_dir`     | `"/tmp/nxvim-remote"`                      | where `binary = "install"` stages the binary on the remote          |
 | `release_url`     | `…/releases/latest/download/nxvim-{platform}` | release-URL template; `{platform}` → e.g. `linux-x86_64`         |
-| `cache_dir`       | `stdpath("cache")/nxvim-remote-containers`| local download cache                                                |
+| `cache_dir`       | `stdpath("cache")/nxvim-remotes`| local download cache                                                |
 | `config_source`   | `"remote"`                                | `"remote"` or `"local"` (see above)                                 |
 | `control_persist` | `"60"`                                    | ssh control-master idle lifetime (seconds, or `"yes"`)              |
 | `docker`/`ssh`/`scp` | `"docker"`/`"ssh"`/`"scp"`              | the CLIs to invoke (override to point at a wrapper)                 |

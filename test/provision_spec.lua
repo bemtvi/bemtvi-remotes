@@ -1,7 +1,7 @@
 -- The provisioning engine's pure helpers: platform mapping (uname -> release key) and the
 -- release-URL template. Run with `nxvim --test-plugin .`.
 
-local provision = require("nxvim-remote-containers.provision")
+local provision = require("nxvim-remotes.provision")
 
 nx.test.describe("platform mapping", function()
   nx.test.it("maps Linux x86_64 -> linux-x86_64", function()

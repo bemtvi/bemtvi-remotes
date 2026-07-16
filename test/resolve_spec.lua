@@ -4,8 +4,8 @@
 -- daemon is never actually spawned; the argv the connector *builds* is what's asserted. Run
 -- with `nxvim --test-plugin .`.
 
-local backends = require("nxvim-remote-containers.backends")
-local provision = require("nxvim-remote-containers.provision")
+local backends = require("nxvim-remotes.backends")
+local provision = require("nxvim-remotes.provision")
 
 -- Write a fake `docker` into a fresh temp dir and return its path. `uname` is the platform
 -- string `docker exec <c> uname -sm` prints; `reachable = false` makes that call exit 1.
@@ -13,7 +13,7 @@ local provision = require("nxvim-remote-containers.provision")
 -- reuse path) or fails (would trigger a download — not exercised here).
 local function make_fake_docker(uname, reachable, installed)
   return nx.async(function()
-    local dir = vim.fn.stdpath("cache") .. "/nxvim-remote-containers-test/" .. nx.uuid()
+    local dir = vim.fn.stdpath("cache") .. "/nxvim-remotes-test/" .. nx.uuid()
     nx.await(nx.fs_local.mkdir(dir, { recursive = true }))
     local uname_branch = reachable and ('echo "' .. uname .. '"') or "exit 1"
     local test_branch = installed and "exit 0" or "exit 1"
