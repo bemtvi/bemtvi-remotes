@@ -35,7 +35,7 @@ require("nxvim-remotes").setup({
 
   -- binary = "install" knobs (unused for "path"):
   -- install_dir = "/tmp/nxvim-remote",
-  -- release_url = "https://github.com/nxvim/nxvim/releases/latest/download/nxvim-{platform}",
+  -- release_url = "https://github.com/davidrios/nxvim/releases/latest/download/nxvim-{platform}",
 
   -- §D: run the remote's config after the swap ("remote", default), or keep THIS machine's
   -- editor config and let the container back only the fs/proc/LSP seams ("local" — the
