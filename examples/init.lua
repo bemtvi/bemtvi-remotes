@@ -1,7 +1,7 @@
--- ~~~ nxvim-remotes: connect the editor to a container / host ~~~
+-- ~~~ bemtvi-remotes: connect the editor to a container / host ~~~
 --
 -- This connector teaches `:connect` two schemes and reloads the window onto the remote's
--- `nxvim --daemon` — the editor (buffers, Lua, keystrokes) stays local; only the
+-- `bemtvi --daemon` — the editor (buffers, Lua, keystrokes) stays local; only the
 -- fs/process/LSP seams cross the wire.
 --
 --     :connect container://<name>        -- a running Docker container (docker exec)
@@ -10,32 +10,32 @@
 -- Install it as a SYSTEM plugin so it is present before any `:connect` and survives the
 -- reload onto the remote (the client re-seeds the system tier into every session):
 --
---     :lua nx.plugins.system{ "nxvim/nxvim-remotes" }
+--     :lua btv.plugins.system{ "bemtvi/bemtvi-remotes" }
 --
--- (or clone it into `stdpath("data")/system/nxvim-remotes` yourself). Then
--- `require("nxvim-remotes").setup{...}` — as below — tunes it. As an ordinary
+-- (or clone it into `stdpath("data")/system/bemtvi-remotes` yourself). Then
+-- `require("bemtvi-remotes").setup{...}` — as below — tunes it. As an ordinary
 -- (non-system) plugin it still works in the local session; it just won't persist across a
 -- swap onto a *different* remote.
 --
 -- Try it against a real container:
 --
 --     docker run -d --name devbox -w /root alpine sleep infinity   # a throwaway box
---     # ensure an nxvim daemon binary is reachable inside it (binary = "install" can stage
---     # it for you from a release URL; or bake nxvim into your image), then:
+--     # ensure an bemtvi daemon binary is reachable inside it (binary = "install" can stage
+--     # it for you from a release URL; or bake bemtvi into your image), then:
 --     :connect container://devbox
---     :lua print(nx.daemon.status())     -- "connected": you're editing IN the container
+--     :lua print(btv.daemon.status())     -- "connected": you're editing IN the container
 
-require("nxvim-remotes").setup({
-  -- How to obtain nxvim on the remote:
-  --   "path"    — assume `remote_nxvim` (below) is already on the remote PATH (default).
-  --   "install" — reuse install_dir/nxvim-<platform>, else fetch the matching release binary
+require("bemtvi-remotes").setup({
+  -- How to obtain bemtvi on the remote:
+  --   "path"    — assume `remote_bemtvi` (below) is already on the remote PATH (default).
+  --   "install" — reuse install_dir/bemtvi-<platform>, else fetch the matching release binary
   --               (release_url) to a local cache and copy it in (docker cp / scp), chmod +x.
   binary = "path",
-  remote_nxvim = "nxvim",
+  remote_bemtvi = "bemtvi",
 
   -- binary = "install" knobs (unused for "path"):
-  -- install_dir = "/tmp/nxvim-remote",
-  -- release_url = "https://github.com/davidrios/nxvim/releases/latest/download/nxvim-{platform}",
+  -- install_dir = "/tmp/bemtvi-remote",
+  -- release_url = "https://github.com/davidrios/bemtvi/releases/latest/download/bemtvi-{platform}",
 
   -- §D: run the remote's config after the swap ("remote", default), or keep THIS machine's
   -- editor config and let the container back only the fs/proc/LSP seams ("local" — the
@@ -49,13 +49,13 @@ require("nxvim-remotes").setup({
 })
 
 -- Surface the daemon link so you can SEE the swap took effect (see examples/daemon-status in
--- the nxvim repo for the full statusline segment).
-nx.autocmd.create("User", {
+-- the bemtvi repo for the full statusline segment).
+btv.autocmd.create("User", {
   pattern = "DaemonStatusChanged",
   callback = function()
-    local phase = nx.daemon.status()
+    local phase = btv.daemon.status()
     if phase and phase ~= "local" then
-      nx.notify("daemon: " .. phase)
+      btv.notify("daemon: " .. phase)
     end
   end,
 })

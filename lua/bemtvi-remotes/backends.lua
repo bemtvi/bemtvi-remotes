@@ -38,8 +38,8 @@ function M.docker(opts)
       return argv
     end,
     -- `-i` keeps stdin open: the daemon wire rides the container's stdin/stdout.
-    spawn_argv = function(target, remote_nxvim)
-      return { opts.docker, "exec", "-i", target.ref, remote_nxvim, "--daemon" }
+    spawn_argv = function(target, remote_bemtvi)
+      return { opts.docker, "exec", "-i", target.ref, remote_bemtvi, "--daemon" }
     end,
     copy_argv = function(target, local_path, remote_path)
       return { opts.docker, "cp", local_path, target.ref .. ":" .. remote_path }
@@ -90,7 +90,7 @@ function M.ssh(opts)
   -- paths are length-limited, so hash rather than embed the host). A sibling `.host` file
   -- records the destination so an explicit teardown can `ssh -O exit` it later.
   local function control_path(target)
-    local key = nx.hash.sha256(target.dest .. "|" .. (target.port or "")):sub(1, 16)
+    local key = btv.hash.sha256(target.dest .. "|" .. (target.port or "")):sub(1, 16)
     return opts.control_dir .. "/" .. key
   end
 
@@ -121,9 +121,9 @@ function M.ssh(opts)
     control_path = control_path,
     -- Ensure the control-socket dir exists and record the destination for teardown.
     prepare = function(target)
-      return nx.async(function()
-        nx.await(nx.fs_local.mkdir(opts.control_dir, { recursive = true }))
-        nx.await(nx.fs_local.write(control_path(target) .. ".host", target.dest .. "\n"))
+      return btv.async(function()
+        btv.await(btv.fs_local.mkdir(opts.control_dir, { recursive = true }))
+        btv.await(btv.fs_local.write(control_path(target) .. ".host", target.dest .. "\n"))
       end)()
     end,
     exec_argv = function(target, cmd)
@@ -138,14 +138,14 @@ function M.ssh(opts)
       end
       return argv
     end,
-    spawn_argv = function(target, remote_nxvim)
+    spawn_argv = function(target, remote_bemtvi)
       local argv = { opts.ssh }
       for _, a in ipairs(base_args(target)) do
         argv[#argv + 1] = a
       end
       argv[#argv + 1] = "--"
       argv[#argv + 1] = target.dest
-      argv[#argv + 1] = remote_nxvim
+      argv[#argv + 1] = remote_bemtvi
       argv[#argv + 1] = "--daemon"
       return argv
     end,
