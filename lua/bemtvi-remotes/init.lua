@@ -29,7 +29,7 @@ local DEFAULTS = {
   binary = "path", -- "path" (assume bemtvi on the remote PATH) | "install" (fetch + stage it)
   install_dir = "/tmp/bemtvi-remote", -- where binary = "install" stages the binary on the remote
   -- Release-URL template for binary = "install"; `{platform}` -> e.g. "linux-x86_64".
-  release_url = "https://github.com/davidrios/bemtvi/releases/latest/download/bemtvi-{platform}",
+  release_url = "https://github.com/bemtvi/bemtvi/releases/latest/download/bemtvi-{platform}",
   cache_dir = nil, -- local download cache (default stdpath("cache")/bemtvi-remotes)
   control_dir = nil, -- ssh control-socket dir (default cache_dir/cm)
   control_persist = "60", -- ssh ControlPersist (seconds, or "yes"): master idle-lifetime

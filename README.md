@@ -1,6 +1,6 @@
 # bemtvi-remotes
 
-A **connector** for [bemtvi](https://github.com/davidrios/bemtvi)'s `:connect` — the VS Code
+A **connector** for [bemtvi](https://github.com/bemtvi/bemtvi)'s `:connect` — the VS Code
 Remote model, built entirely on the native `btv.connect` / `btv.session.reconnect` plugin API
 (ADR 0002): no core changes. It teaches `:connect` two URL schemes and **reloads the window
 onto the remote's `bemtvi --daemon`**. The editor — buffers, Lua, the keystroke path — stays
@@ -42,7 +42,7 @@ require("bemtvi-remotes").setup({
 
 On `:connect <url>`, bemtvi routes the URL through the local VM's connect registry; this
 plugin's resolver runs **on your machine** (the side that dials the daemon) over the
-[local-always seam](https://github.com/davidrios/bemtvi) — `btv.run_local` / `btv.fs_local` /
+[local-always seam](https://github.com/bemtvi/bemtvi) — `btv.run_local` / `btv.fs_local` /
 `btv.http.fetch_local` — so provisioning happens locally even when you invoke it from inside
 an existing remote session. It then:
 

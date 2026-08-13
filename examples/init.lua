@@ -35,7 +35,7 @@ require("bemtvi-remotes").setup({
 
   -- binary = "install" knobs (unused for "path"):
   -- install_dir = "/tmp/bemtvi-remote",
-  -- release_url = "https://github.com/davidrios/bemtvi/releases/latest/download/bemtvi-{platform}",
+  -- release_url = "https://github.com/bemtvi/bemtvi/releases/latest/download/bemtvi-{platform}",
 
   -- §D: run the remote's config after the swap ("remote", default), or keep THIS machine's
   -- editor config and let the container back only the fs/proc/LSP seams ("local" — the
