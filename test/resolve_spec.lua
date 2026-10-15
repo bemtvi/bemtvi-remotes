@@ -13,7 +13,7 @@ local provision = require("bemtvi-remotes.provision")
 -- reuse path) or fails (would trigger a download — not exercised here).
 local function make_fake_docker(uname, reachable, installed)
   return btv.async(function()
-    local dir = vim.fn.stdpath("cache") .. "/bemtvi-remotes-test/" .. btv.uuid()
+    local dir = btv.stdpath("cache") .. "/bemtvi-remotes-test/" .. btv.uuid()
     btv.await(btv.fs_local.mkdir(dir, { recursive = true }))
     local uname_branch = reachable and ('echo "' .. uname .. '"') or "exit 1"
     local test_branch = installed and "exit 0" or "exit 1"

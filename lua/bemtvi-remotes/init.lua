@@ -36,14 +36,14 @@ local DEFAULTS = {
   config_source = "remote", -- §D: run the remote's config ("remote") or this machine's ("local")
 }
 
-M._opts = M._opts or vim.tbl_extend("force", {}, DEFAULTS)
+M._opts = M._opts or btv.tbl.extend("force", {}, DEFAULTS)
 
 -- `setup(opts)` — merge `opts`, register the `container://` / `ssh://` connect providers, and
 -- define `:RemotesClean`. Idempotent: re-registering a scheme is fine (a later
 -- `btv.connect.register` wins), so calling `setup` again just re-applies options.
 function M.setup(opts)
-  M._opts = vim.tbl_extend("force", M._opts, opts or {})
-  local cache = M._opts.cache_dir or (vim.fn.stdpath("cache") .. "/bemtvi-remotes")
+  M._opts = btv.tbl.extend("force", M._opts, opts or {})
+  local cache = M._opts.cache_dir or (btv.stdpath("cache") .. "/bemtvi-remotes")
   M._opts.cache_dir = cache
   M._opts.control_dir = M._opts.control_dir or (cache .. "/cm")
 
