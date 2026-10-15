@@ -13,3 +13,10 @@ repos:
         entry: selene
         language: system
         types: [lua]
+      - id: vimdoc-up-to-date
+        name: vimdoc up to date
+        entry: scripts/check-vimdoc.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]
