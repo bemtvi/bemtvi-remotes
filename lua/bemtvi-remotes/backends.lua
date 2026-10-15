@@ -14,9 +14,7 @@ local function parse_container(url)
   local name = url:match("^container://(.+)$")
   name = name and name:match("^%s*(.-)%s*$")
   if not name or name == "" then
-    error(
-      "remotes: malformed container URL " .. tostring(url) .. " (want container://<name>)"
-    )
+    error("remotes: malformed container URL " .. tostring(url) .. " (want container://<name>)")
   end
   if name:sub(1, 1) == "-" then
     error("remotes: container name must not begin with '-' (" .. name .. ")")
@@ -56,9 +54,7 @@ local function parse_ssh(url)
   local rest = url:match("^ssh://(.+)$")
   rest = rest and rest:match("^%s*(.-)%s*$")
   if not rest or rest == "" then
-    error(
-      "remotes: malformed ssh URL " .. tostring(url) .. " (want ssh://[user@]host[:port])"
-    )
+    error("remotes: malformed ssh URL " .. tostring(url) .. " (want ssh://[user@]host[:port])")
   end
   local user, hostport = rest:match("^([^@]+)@(.+)$")
   if not user then
